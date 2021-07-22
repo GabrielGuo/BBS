@@ -1,0 +1,102 @@
+<!--
+# @Time    : 2021-07-22 20:01
+# @Author  : 乐天派逗逗 Gabriel 
+# @Site    : Windows 10
+# @File    : home_backend.html
+# @Software: PyCharm
+# @Contact : 1584838420@qq.com
+# @Features: 后台管理界面模板
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理界面</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/theme.css">
+    <script src="/static/jquery-3.3.1.js"></script>
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    {% block csscontent %}
+
+    {% endblock %}
+</head>
+<body>
+<div class="head">
+    <div>
+        <h3  class="pull-left">博客园BBS---<a href="/backend/">后台管理</a></h3>
+        <h3  class="pull-right"><a href="/"><span class="glyphicon glyphicon-home"></span></a></h3>
+    </div>
+</div>
+<div class="contain-fluid">
+    <div class="col-md-3">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-info">
+                <div class="panel-heading" role="tab" id="headingOne">
+                  <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      文章管理
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;<a href="/add_article/">添加文章</a></div>
+                    <div class="panel-body"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp; <a href="">修改文章</a></div>
+                    <div class="panel-body"><span class="glyphicon glyphicon-alert"></span>&nbsp;&nbsp; <a href="">删除文章</a></div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingTwo">
+                  <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                      第二部分
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                  <div class="panel-body">
+                      第二部分的正文
+                  </div>
+                </div>
+          </div>
+            <div class="panel panel-success">
+                <div class="panel-heading" role="tab" id="headingThree">
+                  <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                      第三部分
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                  <div class="panel-body">
+                      第三部分的正文
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div>
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">主页</a></li>
+            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">随笔</a></li>
+            <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">相册</a></li>
+            <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">设置</a></li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="home">
+                {% block backend %}
+
+                {% endblock %}
+            </div>
+            <div role="tabpanel" class="tab-pane" id="profile">随笔</div>
+            <div role="tabpanel" class="tab-pane" id="messages">相册</div>
+            <div role="tabpanel" class="tab-pane" id="settings">设置</div>
+          </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

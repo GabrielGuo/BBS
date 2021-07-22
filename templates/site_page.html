@@ -1,0 +1,49 @@
+<!--
+# @Time    : 2021-07-21 14:16
+# @Author  : 乐天派逗逗 Gabriel 
+# @Site    : Windows 10
+# @File    : site_page.html
+# @Software: PyCharm
+# @Contact : 1584838420@qq.com
+# @Features: 个人站点文章列表
+-->
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .article{
+        margin: 5px auto 35px;
+        {#border-bottom: 1px dashed darkgray;#}
+        clear: both;
+    }
+    .info{
+    }
+    .info span{
+        color: #ccbb9e;
+    }
+</style>
+{% for article in article_list %}
+<div class="article">
+    <h4  class="media-heading"><a href="/{{ article.user }}/article/{{ article.pk }}">{{ article.title }}</a></h4>
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" src="/media/{{ article.user.avatar }}" width="64" height="64">
+        </a>
+      </div>
+      <div class="media-body">
+        {{ article.desc }}
+      </div>
+    </div>
+    <div class="info pull-right">
+        <span>post @</span>
+        <span>{{ article.create_time|date:"y-m-d m:m" }}</span>&nbsp;&nbsp;
+        <span><a href="">{{ article.user }}</a></span>&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="glyphicon glyphicon-comment">评论（{{ article.comment_count }}）</span>&nbsp;&nbsp;
+        <span class="glyphicon glyphicon-thumbs-up">点赞（{{ article.up_count }}）</span>&nbsp;&nbsp;
+
+
+    </div>
+</div>
+
+{% endfor %}
+{% endblock content %}

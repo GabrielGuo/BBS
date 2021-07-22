@@ -1,0 +1,76 @@
+@charset "utf-8";
+/*****************************
+# @Time    : 2021-07-22 12:29
+# @Author  : 乐天派逗逗 Gabriel 
+# @Site    : Windows 10
+# @File    : article_detail.css
+# @Software: PyCharm
+# @Contact : 1584838420@qq.com
+# @Features: 文章详情页面
+******************************/
+
+#div_digg {
+    float: right;
+    margin-bottom: 10px;
+    margin-right: 30px;
+    font-size: 12px;
+    width: 125px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.diggit {
+    float: left;
+    width: 46px;
+    height: 52px;
+    background: url(/static/img/upup.gif) no-repeat;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 2px;
+    padding-top: 5px;
+}
+
+.diggnum {
+    font-size: 14px;
+    color: #075db3;
+    font-family: Verdana;
+}
+
+#div_digg .diggnum {
+    line-height: 1.5em !important;
+}
+
+.buryit {
+    float: right;
+    margin-left: 20px;
+    width: 46px;
+    height: 52px;
+    background: url(/static/img/downdown.gif) no-repeat;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 2px;
+    padding-top: 5px;
+}
+
+
+.burynum {
+    font-size: 14px;
+    color: #075db3;
+    font-family: Verdana;
+}
+
+#div_digg .burynum {
+    line-height: 1.5em !important;
+}
+
+.clear {
+    clear: both;
+}
+
+.diggword {
+    margin-top: 5px;
+    margin-left: 0;
+    font-size: 12px;
+    color: #808080;
+}
+

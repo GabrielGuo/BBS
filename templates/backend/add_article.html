@@ -1,0 +1,49 @@
+<!--
+# @Time    : 2021-07-22 21:45
+# @Author  : 乐天派逗逗 Gabriel 
+# @Site    : Windows 10
+# @File    : add_article.html
+# @Software: PyCharm
+# @Contact : 1584838420@qq.com
+# @Features:
+-->
+{% extends 'backend/backend_base.html' %}
+
+{% block backend %}
+    <h4>【添加文章】</h4>
+    <form action="/add_article/" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_title">文章标题</label>
+            <input type="text" name="title" id="id_title" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="editor_id">文章内容（kindeditor编辑器——支持复制粘贴上传图片，不支持点击上传图片）</label>
+            <textarea id="editor_id" name="content"></textarea>
+        </div>
+        <button class="btn btn-success">提交</button>
+{#        <input type="submit" id="submit" value="提交" class="btn btn-success">#}
+        <span class="error" style="color: red;"></span>
+    </form>
+
+    {#  kindeditor编辑器#}
+
+    <script charset="utf-8" src="/static/kindeditor/kindeditor-all.js"></script>
+    <script charset="utf-8" src="/static/kindeditor/lang/zh-CN.js"></script>
+    <script>
+        KindEditor.ready(function(K) {
+                window.editor = K.create('#editor_id', {
+                        width:'100%',
+                        minHeight:'200px',
+                        resizeType:1,
+                        {#themeType:"default",#}
+                        uploadJson : '/uploadimg/',
+                        extraFileUploadParams : {
+                            'csrfmiddlewaretoken':'{{csrf_token}}'
+                        }
+                });
+        });
+    </script>
+
+{% endblock %}

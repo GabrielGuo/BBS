@@ -1,0 +1,28 @@
+@charset "utf-8";
+/*****************************
+# @Time    : 2021-07-21 15:23
+# @Author  : 乐天派逗逗 Gabriel 
+# @Site    : Windows 10
+# @File    : theme.css
+# @Software: PyCharm
+# @Contact : 1584838420@qq.com
+# @Features:
+******************************/
+
+.head{
+    height: 70px;
+    line-height: 70px;
+    background: lightblue;
+    margin-bottom: 20px;
+    text-align: center;
+
+}
+
+.head .pull-left{
+    margin-left: 15px;
+}
+
+.head .pull-right{
+    margin-right: 30px;
+    font-size: 30px;
+}

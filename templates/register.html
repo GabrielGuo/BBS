@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册页面</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <script src="/static/jquery-3.3.1.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h1>注册</h1>
+            <form id="my_form">
+                {% csrf_token %}
+{#                {{ form.as_p }}#}
+                {% for foo in form %}
+                    <div class="form-group">
+{#                        foo.auto_id 就是foo生成的input的id#}
+                        <label for="{{ foo.auto_id }}">{{ foo.label }}</label>
+                        {{ foo }}   <span style="color: red; margin-top: 10px" class="error pull-right"></span>
+                    </div>
+                {% endfor %}
+
+                <div class="form-group">
+                    <label for="id_file">头像:
+                        <img src="/static/img/avatar.png" width="100" height="100" style="margin-left: 30px" id="id_img">
+                    </label>
+                    <input type="file" name="avatar"  id="id_file" style="display: none">
+                </div>
+
+                <input type="button" id="submit" value="注册" class="btn btn-success">
+{#                <span class="error" style="color: red;"></span>#}
+
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    // 当控件发生变化的时候 响应该事件
+    $("#id_file").change(function () {
+        // 取到文件对象
+        var file = $("#id_file")[0].files[0]
+
+        // 放到img控件上， 借助于filereader 中间的东西 文件阅读器
+        // 生成一个文件阅读器对象，赋值给filereader
+        var filereader = new FileReader()
+
+        // 将文件读到filereader对象中
+        filereader.readAsDataURL(file)
+        // 读文件需要时间，需要文件读完后再去操作img
+        filereader.onload=function(){
+            $("#id_img").attr('src', filereader.result)
+        }
+
+    })
+
+    $("#submit").click(function () {
+        // ajax上传文件 需要指定编码格式
+        var formdata = new FormData()
+
+        // 一个一个往里面添加，稍微复杂，用简便方法
+        // formdata.append('name', $("#id_name").val())
+        // formdata.append('avatar', $("#avatar")[0].file[0])
+
+        // 简便方法
+        // form对象的serializeArry，它会把form中的数据包装到一个对象中
+        var my_form_data = $("#my_form").serializeArray()
+        // console.log(typeof my_form_data)
+        // console.log(my_form_data)
+
+
+        // jq的循环，传两个参数，第一个是要循环的对象，第二个参数是一个匿名函数
+        $.each(my_form_data, function (k, v) {
+            // console.log(v)
+            formdata.append(v.name, v.value)
+        })
+        formdata.append('avatar', $("#id_file")[0].files[0])
+
+        $.ajax({
+            url: '/register/',
+            type: 'post',
+            processData: false,     // 告诉jQuery不要处理发送的数据
+            contentType: false,     // 告诉jQuery不要去设置Content-Type请求头
+            data:formdata,
+            success: function (data) {
+                console.log(data)
+                if (data.code==100) {
+                    location.href='/login/'
+                }else if(data.code==101){
+                    $.each(data.msg, function (k, v) {
+                        console.log(k,v)
+                        // 获取到span标签进行错误信息的赋值
+                        $("#id_"+k).next().html(v[0])
+                        // 当返回的是两次密码不一致的时候，将错误信息显示在re_pwd的后面
+                        if(k=='__all__'){
+                            $("#id_re_pwd").next().html(v[0])
+                        }
+                    })
+                }else {
+
+                }
+
+                // 定时器 定时清掉错误信息提示
+                setTimeout(function () {
+                    $('.error').html("")
+                }, 3000)
+            }
+        })
+
+    })
+</script>
+</body>
+</html>

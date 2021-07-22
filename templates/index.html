@@ -1,0 +1,158 @@
+<!--
+# @Time    : 2021-07-19 21:43
+# @Author  : 乐天派逗逗 Gabriel 
+# @Site    : Windows 10
+# @File    : index.html
+# @Software: PyCharm
+# @Contact : 1584838420@qq.com
+# @Features:
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <script src="/static/jquery-3.3.1.js"></script>
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">博客园BBS</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">文章 <span class="sr-only">(current)</span></a></li>
+            <li><a href="#">随笔</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">分类 <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Python</a></li>
+                <li><a href="#">Java</a></li>
+                <li><a href="#">C/C++</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">随笔</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">日记</a></li>
+              </ul>
+            </li>
+          </ul>
+          <form class="navbar-form navbar-left">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="搜索">
+            </div>
+            <button type="submit" class="btn btn-default">提交</button>
+          </form>
+          {% if request.user.is_authenticated %}
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">{{ user.username }}</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">更多操作 <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/backend/">后台管理</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/logout/">注销</a></li>
+              </ul>
+            </li>
+          </ul>
+          {% else %}
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/login/">登录</a></li>
+            <li><a href="/register/">注册</a></li>
+          </ul>
+          {% endif %}
+
+
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="container-fluid">
+        <div class="col-md-2">
+            <div class="panel panel-danger">
+              <!-- Default panel contents -->
+              <div class="panel-heading">分类</div>
+
+              <!-- List group -->
+              <ul class="list-group">
+                <li class="list-group-item">Python</li>
+                <li class="list-group-item">C#</li>
+                <li class="list-group-item">PHP</li>
+                <li class="list-group-item">Java</li>
+                <li class="list-group-item">C/C++</li>
+              </ul>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <style>
+                .info{
+                    margin: 5px auto 15px;
+                    border-bottom: 1px dashed darkgray;
+                }
+                .info span{
+                    color: #ccbb9e;
+                }
+            </style>
+            {% for article in article_list %}
+                <h4  class="media-heading"><a href="/{{ article.user }}/article/{{ article.pk }}">{{ article.title }}</a></h4>
+                <div class="media">
+                  <div class="media-left">
+                    <a href="/{{ article.user }}">
+                      <img class="media-object" src="/media/{{ article.user.avatar }}" width="64" height="64">
+                    </a>
+                  </div>
+                  <div class="media-body">
+                    {{ article.desc }}
+                  </div>
+                </div>
+                <div class="info">
+                    <span><a href="/{{ article.user }}">{{ article.user }}</a></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>{{ article.category }}</span>&nbsp;&nbsp;
+                    <span>发布于 {{ article.create_time|date:"Y-m-d H:i" }}</span>&nbsp;&nbsp;
+                    {#  评论 {{ article.comment_set.count }}&nbsp;&nbsp;&nbsp;&nbsp;#}
+                    <span class="glyphicon glyphicon-comment">评论（{{ article.comment_count }}）</span>&nbsp;&nbsp;
+                    <span class="glyphicon glyphicon-thumbs-up">点赞（{{ article.up_count }}）</span>&nbsp;&nbsp;
+
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel panel-info">
+              <!-- Default panel contents -->
+              <div class="panel-heading">Python</div>
+              <div class="panel-body">
+                <p>业界一流，创造世界上最美好的城市，最宜居的城市，写最牛逼的语言——人生苦短，我用python</p>
+              </div>
+
+              <!-- List group -->
+              <ul class="list-group">
+                <li class="list-group-item">Django</li>
+                <li class="list-group-item">Flask</li>
+                <li class="list-group-item">Pyqt</li>
+                <li class="list-group-item">爬虫</li>
+                <li class="list-group-item">大数据</li>
+              </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

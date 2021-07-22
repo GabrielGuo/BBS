@@ -1,0 +1,117 @@
+<!--
+# @Time    : 2021-07-21 14:16
+# @Author  : 乐天派逗逗 Gabriel 
+# @Site    : Windows 10
+# @File    : site_page.html
+# @Software: PyCharm
+# @Contact : 1584838420@qq.com
+# @Features:
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人站点</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/{{ blog.theme }}.css">
+    <script src="/static/jquery-3.3.1.js"></script>
+</head>
+<body>
+<div class="head">
+    <div>
+        <h3  class="pull-left">{{ blog.site_name }}</h3>
+        <h3  class="pull-right"><a href="/"><span class="glyphicon glyphicon-home"></span></a></h3>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-success">
+              <!-- Default panel contents -->
+              <div class="panel-heading">文章分类</div>
+
+              <!-- List group -->
+              <ul class="list-group">
+{#                <li class="list-group-item">Python</li>#}
+{#                <li class="list-group-item">C#</li>#}
+{#                <li class="list-group-item">PHP</li>#}
+{#                <li class="list-group-item">Java</li>#}
+{#                <li class="list-group-item">C/C++</li>#}
+                  {% for category in category__ret %}
+                  <li class="list-group-item"><a href="/{{ user.username }}/category/{{ category.nid }}">{{ category.title }}({{ category.cou }})</a></li>
+                  {% endfor %}
+
+              </ul>
+            </div>
+
+            <div class="panel panel-danger">
+              <!-- Default panel contents -->
+              <div class="panel-heading">标签</div>
+
+              <!-- List group -->
+              <ul class="list-group">
+{#                <li class="list-group-item">Python</li>#}
+{#                <li class="list-group-item">C#</li>#}
+{#                <li class="list-group-item">PHP</li>#}
+{#                <li class="list-group-item">Java</li>#}
+{#                <li class="list-group-item">C/C++</li>#}
+                  {% for tag in tag__ret %}
+                    <li class="list-group-item"><a href="/{{ user.username }}/tag/{{ tag.nid }}">{{ tag.title }}({{ tag.cou }})</a></li>
+                  {% endfor %}
+              </ul>
+            </div>
+
+            <div class="panel panel-info">
+              <!-- Default panel contents -->
+              <div class="panel-heading">随笔日记</div>
+              <!-- List group -->
+              <ul class="list-group">
+                  {% for month in month_ret %}
+                    <li class="list-group-item"><a href="/{{ user.username }}/archive/{{ month.0 |date:'Y-m' }}">{{ month.0 |date:'Y年m月' }}({{ month.1 }})</a></li>
+                  {% endfor %}
+              </ul>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <style>
+                .article{
+                    margin: 5px auto 35px;
+                    {#border-bottom: 1px dashed darkgray;#}
+                    clear: both;
+                }
+                .info{
+                }
+                .info span{
+                    color: #ccbb9e;
+                }
+            </style>
+            {% for article in article_list %}
+            <div class="article">
+                <h4  class="media-heading"><a href="">{{ article.title }}</a></h4>
+                <div class="media">
+                  <div class="media-left">
+                    <a href="#">
+                      <img class="media-object" src="/media/{{ article.user.avatar }}" width="64" height="64">
+                    </a>
+                  </div>
+                  <div class="media-body">
+                    {{ article.desc }}
+                  </div>
+                </div>
+                <div class="info pull-right">
+                    <span>post @</span>
+                    <span>{{ article.create_time|date:"y-m-d m:m" }}</span>&nbsp;&nbsp;
+                    <span><a href="">{{ article.user }}</a></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="glyphicon glyphicon-comment">评论（{{ article.comment_count }}）</span>&nbsp;&nbsp;
+                    <span class="glyphicon glyphicon-thumbs-up">点赞（{{ article.up_count }}）</span>&nbsp;&nbsp;
+
+
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

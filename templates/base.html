@@ -1,0 +1,86 @@
+<!--
+# @Time    : 2021-07-21 23:49
+# @Author  : 乐天派逗逗 Gabriel 
+# @Site    : Windows 10
+# @File    : base.html
+# @Software: PyCharm
+# @Contact : 1584838420@qq.com
+# @Features: 个人站点的公共代码
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人站点</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/{{ blog.theme }}.css">
+    <script src="/static/jquery-3.3.1.js"></script>
+    {% block csscontent %}
+
+    {% endblock %}
+</head>
+<body>
+<div class="head">
+    <div>
+        <h3  class="pull-left"><a href="/{{ user.username }}">【{{ blog.site_name }}】</a></h3>
+        <h3  class="pull-right"><a href="/"><span class="glyphicon glyphicon-home"></span></a></h3>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-success">
+              <!-- Default panel contents -->
+              <div class="panel-heading">文章分类</div>
+
+              <!-- List group -->
+              <ul class="list-group">
+{#                <li class="list-group-item">Python</li>#}
+{#                <li class="list-group-item">C#</li>#}
+{#                <li class="list-group-item">PHP</li>#}
+{#                <li class="list-group-item">Java</li>#}
+{#                <li class="list-group-item">C/C++</li>#}
+                  {% for category in category__ret %}
+                  <li class="list-group-item"><a href="/{{ user.username }}/category/{{ category.nid }}">{{ category.title }}({{ category.cou }})</a></li>
+                  {% endfor %}
+
+              </ul>
+            </div>
+
+            <div class="panel panel-danger">
+              <!-- Default panel contents -->
+              <div class="panel-heading">标签</div>
+
+              <!-- List group -->
+              <ul class="list-group">
+{#                <li class="list-group-item">Python</li>#}
+{#                <li class="list-group-item">C#</li>#}
+{#                <li class="list-group-item">PHP</li>#}
+{#                <li class="list-group-item">Java</li>#}
+{#                <li class="list-group-item">C/C++</li>#}
+                  {% for tag in tag__ret %}
+                    <li class="list-group-item"><a href="/{{ user.username }}/tag/{{ tag.nid }}">{{ tag.title }}({{ tag.cou }})</a></li>
+                  {% endfor %}
+              </ul>
+            </div>
+
+            <div class="panel panel-info">
+              <!-- Default panel contents -->
+              <div class="panel-heading">随笔日记</div>
+              <!-- List group -->
+              <ul class="list-group">
+                  {% for month in month_ret %}
+                    <li class="list-group-item"><a href="/{{ user.username }}/archive/{{ month.0 |date:'Y-m' }}">{{ month.0 |date:'Y年m月' }}({{ month.1 }})</a></li>
+                  {% endfor %}
+              </ul>
+            </div>
+        </div>
+        <div class="col-md-9">
+        {% block content %}
+
+        {% endblock content %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

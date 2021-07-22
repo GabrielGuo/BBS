@@ -1,0 +1,186 @@
+<!--
+# @Time    : 2021-07-22 00:00
+# @Author  : 乐天派逗逗 Gabriel 
+# @Site    : Windows 10
+# @File    : article_detail.html
+# @Software: PyCharm
+# @Contact : 1584838420@qq.com
+# @Features: 文章详情页面
+-->
+{% extends 'base.html' %}
+{% block csscontent %}
+    <link rel="stylesheet" href="/static/css/article_detail.css">
+{% endblock %}
+
+{% block content %}
+<div>
+    <h4>{{ article.title }}</h4>
+    <div>
+        {{ article.content|safe }}
+    </div>
+
+    {#    点赞功能#}
+    <div class=" clearfix">
+        <div id="div_digg">
+            <div class="diggit upanddown">
+                <span class="diggnum" id="digg_count">{{ article.up_count }}</span>
+            </div>
+            <div class="buryit  upanddown">
+                <span class="burynum" id="bury_count">{{ article.down_count }}</span>
+            </div>
+            <div class="clear"></div>
+            <div class="diggword" id="digg_tips">
+            </div>
+        </div>
+    </div>
+
+
+
+
+{#    评论相关#}
+    <div>
+        <div>
+            <p>【评论列表】</p>
+            <div class="list-group comment_content">
+                {% for comment in article.comment_set.all %}
+                <li class="list-group-item">
+                    <p>
+                        <span>#{{ forloop.counter }}楼 </span>
+                        <span>{{ comment.create_time|date:"Y-m-d H:i"}}</span>
+                        <span><a href="/{{ comment.user }}" target="_blank">{{ comment.user }}</a></span>
+                        <span class="pull-right reply" username="{{ comment.user }}" comment_id="{{ comment.pk }}"><a href="javascript:void(0)">回复</a></span>
+                    </p>
+                    {% if comment.parent_comment %}
+                        <p class="well">@{{ comment.parent_comment.user.username }}:{{ comment.parent_comment }}</p>
+                    {% endif %}
+                    {{ comment.content }}
+                </li>
+                {% endfor %}
+            </div>
+
+        </div>
+
+        <div>
+            <p>【发表评论】</p>
+            <p>
+               昵称：<input type="text" id="tbCommentAuthor" class="author" disabled="disabled" size="50" value="{{ request.user.username}}">
+            </p>
+            <p>评论内容：</p>
+            <textarea name="" id="id_content" cols="120" rows="3"></textarea>
+            <p><input type="button" id="id_submit" value="提交" class="btn btn-success pull-right"></p>
+
+        </div>
+    </div>
+
+    <script>
+        var parent_id =''
+        // 点赞功能
+        $('.upanddown').click(function () {
+            // 当前点击控件有没有diggit 这个类
+            var is_up = $(this).hasClass('diggit')
+
+            // 拿到当前点击控件的子控件span标签对象
+            var cu_span = $(this).children('span')
+
+            // 谁对哪篇文章点赞或点踩
+            $.ajax({
+                url:'/diggit/',
+                type: 'post',
+                data:{
+                    article_id: '{{ article.pk }}',
+                    is_up: is_up,
+                    'csrfmiddlewaretoken':'{{csrf_token}}'
+                },
+                success:function (data) {
+                    console.log(data)
+                    $("#digg_tips").text(data.msg)
+
+                    if(data.code==100){
+                        cu_span.text(Number(cu_span.val())+1)
+                    }
+                }
+            })
+        })
+
+        // 评论提交功能
+        $('#id_submit').click(function () {
+            var cur_content = $('#id_content').val()
+            if(parent_id){
+                // 有值 截取前面的@姓名
+                // indexOf 截取 \n 的索引位置 +1 为了换行到下一行
+                var index = cur_content.indexOf('\n')+1
+                cur_content = cur_content.slice(index)
+                console.log(index, cur_content)
+            }
+            if(cur_content.length) {
+                // 谁对哪篇文章进行了评论
+                $.ajax({
+                    url: '/commit/',
+                    type: 'post',
+                    data: {
+                        article_id: '{{ article.pk }}',
+                        content: cur_content,
+                        parent_id: parent_id,
+                        'csrfmiddlewaretoken': '{{csrf_token}}'
+                    },
+                    success: function (data) {
+                        console.log(data)
+                        // 清除输入框的评论
+                        $('#id_content').val('')
+                        if (data.code == 100) {
+                            //在评论之后继续追加内容
+                            // 追加根评论的内容
+                            // ES6语法 字符串替换 ${username}
+                            {#var cur_username = String({{ user }})#}
+                            {#var reply_content = cur_content#}
+
+                            var cur_username = data.username
+                            var reply_content = data.reply_content
+
+                            if(parent_id){
+                                var parent_name =  data.parent_name
+                                var temp = `
+                                        <li class="list-group-item">
+                                            <p><span>${cur_username}</a></span></p>
+                                            <p class="well">@${parent_name}</p>
+                                            <p><span>${reply_content}</span></p>
+                                        </li>
+                                        `
+                            }else {
+                                var temp = `
+                                            <li class="list-group-item">
+                                                <p><span>${cur_username}</a></span></p>
+                                                <p><span>${reply_content}</span></p>
+
+                                            </li>
+                                            `
+                            }
+
+                            $(".comment_content").append(temp)
+                        }
+                    }
+                })
+            }else {
+                alert("请先输入评论内容再进行提交操作")
+            }
+
+
+        })
+
+        // 回复评论功能
+        $('.reply').click(function () {
+            var username = $(this).attr('username')
+            parent_id = $(this).attr('comment_id')
+            console.log(parent_id)
+
+            // 点击回复后跳转到输入框
+            // 光标聚焦到该控件上去
+            // location.href="#id_content"
+            {#window.location.hash="#id_content"#}
+            $('#id_content').focus()
+            $('#id_content').val('@'+username+'\n')
+        })
+    </script>
+
+</div>
+{% endblock %}

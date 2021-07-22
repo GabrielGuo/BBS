@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <script src="/static/jquery-3.3.1.js"></script>
+    <title>登录页面</title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h1>登录</h1>
+            <form>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="">用户名</label>
+                    <input type="text" id="id_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="">密码</label>
+                    <input type="password" id="id_pwd" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="">验证码</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" id="code" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <img height="35" width="250" src="/get_code/" id="id_img">
+                        </div>
+
+                    </div>
+                </div>
+                <input type="button" id="submit" value="登录" class="btn btn-success">
+                <span class="error" style="color: red;"></span>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // 点击图片进行刷新
+    $("#id_img").click(function () {
+        // 当图片地址发生变化时，会自动更新
+        $("#id_img")[0].src +='?'
+    })
+    $("#submit").click(function () {
+        $.ajax({
+            url: '/login/',
+            type: 'post',
+            data: {
+                'name': $("#id_name").val(),
+                'pwd': $("#id_pwd").val(),
+                'code': $("#code").val(),
+                'csrfmiddlewaretoken':'{{csrf_token}}'
+            },
+            success: function (data) {
+                console.log(data)
+                if(data.code==100){
+                    // 跳转到首页
+                    location.href='/index/';
+                    // location.href=data.url;
+                }else{
+                    {#$(".error").html(data.msg)#}
+                    $(".error").text(data.msg)
+                }
+
+            },
+            error: function (data) {
+                alert(data);
+            }
+
+
+        })
+    })
+
+</script>
+</body>
+</html>
